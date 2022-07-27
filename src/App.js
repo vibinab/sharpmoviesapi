@@ -2,6 +2,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
+// import { Addmovie } from './components/Addmovie';
+import AddMovie1 from './components/AddMovie1';
 
 function App() {
 
@@ -40,7 +42,7 @@ const fetchMoviesHanlder=useCallback( async()=> {
   seterror(null)
 try {
 
-  const response= await fetch('https://swapi.dev/api/films/')
+  const response= await fetch('https://sharpmovie-c455c-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json')
 
   
   if(!response.ok){
@@ -49,16 +51,31 @@ try {
 
   const data = await response.json();
 
-  const transformedMovies=data.results.map((movieData)=> {
-        return {
-          id:movieData.episode_id,
-          title:movieData.title,
-          openingText:movieData.opening_crawl,
-          releaseDate:movieData.release_date
-        }
-      });
-      console.log(transformedMovies)
-      setmovies(transformedMovies)
+  // const data= await response.json();
+  const loadedMovies=[];
+  for(const key in data){
+   loadedMovies.push({
+     id:key,
+     title:data[key].title,
+     openingText:data[key].openingText,
+     releaseDate:data[key].releaseDate,
+   });
+  }
+
+
+
+ console.log(data)
+
+  // const transformedMovies=data.results.map((movieData)=> {
+  //       return {
+  //         id:movieData.episode_id,
+  //         title:movieData.title,
+  //         openingText:movieData.opening_crawl,
+  //         releaseDate:movieData.release_date
+  //       }
+  //     });
+  //     console.log(transformedMovies)
+      setmovies(loadedMovies)
      
     }
 
@@ -96,8 +113,31 @@ if(error){
   //   },
   // ];
 
+  // const addmoviehandle=(name, desc)=> {
+  //   console.log("app")
+  //   console.log(name,desc)
+
+  // }
+
+  async function addMovieHandler(movie) {
+    const response=await fetch('https://sharpmovie-c455c-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json', {
+      method:'POST',
+      body:JSON.stringify(movie),
+      headers: {
+        'Content-Type':'application/json'
+      }
+    });
+    const data=await response.json();
+    console.log(data)
+   
+  }
+
   return (
     <React.Fragment>
+
+      <AddMovie1 onAddMovie={addMovieHandler} />
+
+       {/* <Addmovie onaddmovie={addmoviehandle}/> */}
       <section>
         <button onClick={fetchMoviesHanlder}>Fetch Movies</button>
       </section>

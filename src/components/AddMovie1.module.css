@@ -1,0 +1,47 @@
+.formbox {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    background-color: white;
+    width: 47%;
+    margin: 0 auto;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+}
+
+
+
+.control {
+    margin: 1rem 0;
+    width: 50%;
+    margin: 0 auto;
+  }
+  
+  .control label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: left;
+  }
+  
+  .control input,
+  .control textarea {
+    display: block;
+    width: 100%;
+    font: inherit;
+    padding: 0.2rem;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+  }
+  
+  .control input:focus,
+  .control textarea:focus {
+    outline: none;
+    border-color: #230052;
+  }
+
+  .addbuttondiv{
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+  }
