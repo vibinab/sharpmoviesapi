@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
 
 function App() {
 
-  const [movies,setmovies]=useState([])
+  const [movies,setmovies]=useState([]);
+
+  const[error,seterror]=useState(null)
 
   const [isloading, setisloading]=useState(false)
 
@@ -29,13 +31,23 @@ function App() {
 
   // }
 
-async function fetchMoviesHanlder() {
+ 
+  
+
+const fetchMoviesHanlder=useCallback( async()=> {
 
   setisloading(true)
+  seterror(null)
+try {
 
   const response= await fetch('https://swapi.dev/api/films/')
 
-  const data = await response.json()
+  
+  if(!response.ok){
+    throw new Error('something went wrong ....Retrying')
+  }
+
+  const data = await response.json();
 
   const transformedMovies=data.results.map((movieData)=> {
         return {
@@ -47,10 +59,24 @@ async function fetchMoviesHanlder() {
       });
       console.log(transformedMovies)
       setmovies(transformedMovies)
-      setisloading(false)
+     
     }
-  
 
+    catch(error){
+      seterror(error.message)
+    }
+    setisloading(false)
+},[]);
+
+useEffect(()=> {
+  fetchMoviesHanlder()
+}, [fetchMoviesHanlder]);
+
+  
+  
+if(error){
+  console.log("error")
+}
 
 
 
@@ -80,10 +106,13 @@ async function fetchMoviesHanlder() {
         !isloading && movies.length>0 && <MoviesList movies={movies} />
        } 
        {
-        !isloading && movies.length===0 && <p>click on fetch button</p>
+        !isloading && movies.length===0 && !error && <p>click on fetch button</p>
        }
        {
         isloading && <p>loading</p>
+       }
+       {
+        !isloading && error && <p>{error}</p>
        }
       </section>
     </React.Fragment>
