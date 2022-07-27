@@ -7,6 +7,8 @@ function App() {
 
   const [movies,setmovies]=useState([])
 
+  const [isloading, setisloading]=useState(false)
+
   // function fetchMoviesHanlder() {
   // fetch('https://swapi.dev/api/films/')
   // .then(response=> {
@@ -29,6 +31,8 @@ function App() {
 
 async function fetchMoviesHanlder() {
 
+  setisloading(true)
+
   const response= await fetch('https://swapi.dev/api/films/')
 
   const data = await response.json()
@@ -43,6 +47,7 @@ async function fetchMoviesHanlder() {
       });
       console.log(transformedMovies)
       setmovies(transformedMovies)
+      setisloading(false)
     }
   
 
@@ -71,7 +76,15 @@ async function fetchMoviesHanlder() {
         <button onClick={fetchMoviesHanlder}>Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={movies} />
+       {
+        !isloading && movies.length>0 && <MoviesList movies={movies} />
+       } 
+       {
+        !isloading && movies.length===0 && <p>click on fetch button</p>
+       }
+       {
+        isloading && <p>loading</p>
+       }
       </section>
     </React.Fragment>
   );
