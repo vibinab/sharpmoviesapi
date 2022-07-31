@@ -132,6 +132,13 @@ if(error){
    
   }
 
+// my code  
+ function  deletemoviehandler(id){
+  console.log("app rinn")
+  console.log(id)
+ }
+
+
   return (
     <React.Fragment>
 
@@ -143,7 +150,9 @@ if(error){
       </section>
       <section>
        {
-        !isloading && movies.length>0 && <MoviesList movies={movies} />
+        !isloading && movies.length>0 && <MoviesList movies={movies}
+        ondeletefromapp={deletemoviehandler}
+         />
        } 
        {
         !isloading && movies.length===0 && !error && <p>click on fetch button</p>
